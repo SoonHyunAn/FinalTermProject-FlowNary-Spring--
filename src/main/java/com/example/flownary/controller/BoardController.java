@@ -4,12 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -96,17 +94,18 @@ public class BoardController {
 		}
 		return jArr;
 	}
+	
 	@GetMapping("/replyList")
-	public JSONArray replyList(@RequestParam int bid,@RequestParam int uid,
-			@RequestParam int offset,@RequestParam int limit) {
-		List<Reply> list = rSvc.getReplyList(uid, offset, limit);
+	public JSONArray replyList(@RequestParam int bid,
+			@RequestParam int offset, @RequestParam int limit) {
+		List<Reply> list = rSvc.getReplyList(bid, offset, limit);
 		JSONArray jArr = new JSONArray();
 		for(Reply reply :list) {
 			JSONObject jreply = new JSONObject();
  			jreply.put("rid", reply.getRid());
  			jreply.put("bid", reply.getBid());
  			jreply.put("uid", reply.getUid());
- 			jreply.put("rContents", reply.getRContents());
+ 			jreply.put("rContents", reply.getrContents());
  			jreply.put("modTime", reply.getModTime());
  			jreply.put("likeCount", reply.getLikeCount());
  			jreply.put("nickname", reply.getNickname());
@@ -118,9 +117,25 @@ public class BoardController {
 	
 	@PostMapping("/insert")
 	public int insertForm(@RequestBody Board dto) {
+		
+		String shareUrl = "";
+		boolean t = true;
+		
+		while (t)
+		{
+			shareUrl = RandomStringUtils.randomAlphanumeric(10);
+			
+			if (bSvc.getBoardShareUrl(shareUrl) == 0)
+			{
+				t = false;
+				break;
+			}
+		}
+		
 		Board board = new Board(dto.getUid(), dto.getTitle()
-				, dto.getbContents(), dto.getImage(), dto.getShareUrl()
-				, dto.getHashTag(), dto.getNickname());
+				, dto.getbContents(), dto.getImage(), shareUrl
+				, dto.getNickname(), dto.getHashTag());
+		
 		bSvc.insertBoard(board);
 		return 0;
 	}
@@ -161,14 +176,15 @@ public class BoardController {
 	}
 	@PostMapping("/reply")
 	public void reply(@RequestBody Reply dto) {
-		Reply reply = new Reply(dto.getBid(),dto.getUid(),dto.getRContents(),dto.getNickname());
+		System.out.println(dto);
+		Reply reply = new Reply(dto.getBid(),dto.getUid(),dto.getrContents(),dto.getNickname());
 		rSvc.insertReply(reply);
 		
-		System.out.println(reply);
         // 댓글 조회수
 		Board board = new Board();
 		int replyCount = board.getReplyCount();
 		bSvc.updateReplyCount(dto.getBid(), replyCount);
+		System.out.println(reply);
 	}
 	
 	@PostMapping("/Re_Reply")

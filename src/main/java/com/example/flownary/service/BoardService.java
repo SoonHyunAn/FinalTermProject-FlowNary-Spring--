@@ -9,6 +9,8 @@ public interface BoardService {
 
 	Board getBoard(int bid);
 	
+	int getBoardShareUrl(String ShareUrl);
+	
 	int getBoardCount(String field, String query);
 	
 	List<Board> getBoardList(int count, String field, String query);

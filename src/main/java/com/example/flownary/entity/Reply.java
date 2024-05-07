@@ -22,13 +22,10 @@ public class Reply {
 	LocalDateTime modTime;
 	int likeCount;
 	String nickname;
-	int isDeleted;
+	int isDeleted;	
 	
-	public Reply(int bid, int uid, String rContents, String nickname) {
-		this.bid = bid;
-		this.uid = uid;
-		this.rContents = rContents;
-		this.nickname = nickname;
+	public String getrContents() {
+		return this.rContents;
 	}
 
 	@Override
@@ -37,6 +34,10 @@ public class Reply {
 				+ modTime + ", isDeleted=" + isDeleted + ", nickname=" + nickname + "]";
 	}
 
-
-
+	public Reply(int bid, int uid, String rContents, String nickname) {
+		this.bid = bid;
+		this.uid = uid;
+		this.rContents = rContents;
+		this.nickname = nickname;
+	}
 }
