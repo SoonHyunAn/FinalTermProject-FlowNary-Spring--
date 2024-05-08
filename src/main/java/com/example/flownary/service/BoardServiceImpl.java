@@ -26,6 +26,11 @@ public class BoardServiceImpl implements BoardService{
 	}
 	
 	@Override
+	public Board getBoardShareUrl2(String ShareUrl) {
+		return boardDao.getBoardShareUrl2(ShareUrl);
+	}
+	
+	@Override
 	public int getBoardCount(String field, String query) {
 		query = "%" + query + "%";
 		return boardDao.getBoardCount(field, query);

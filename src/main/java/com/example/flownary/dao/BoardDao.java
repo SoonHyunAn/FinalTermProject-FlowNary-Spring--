@@ -19,6 +19,10 @@ public interface BoardDao {
 			+ " where isDeleted=0 and shareUrl=#{shareUrl}")
 	int getBoardShareUrl(String shareUrl);
 	
+	@Select("select * from board"
+			+ " where isDeleted=0 and shareUrl=#{shareUrl}")
+	Board getBoardShareUrl2(String shareUrl);
+	
 	@Select("select count(b.bid) from board b"
 	         + " JOIN users u ON b.uid=u.uid"
 	         + " where b.isDeleted=0 and ${field} like #{query}")

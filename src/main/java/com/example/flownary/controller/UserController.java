@@ -56,14 +56,14 @@ public class UserController {
 		userSvc.insertUser(user);
 
 		user = userSvc.getUserEmail(email);
-
-		// 유저 생성했으므로 1:1로 해당 유저의 Setting에 대한 정보도 생성 후 저장
-		Setting set = new Setting();
-
-		set.setUid(user.getUid());
-		set.setTheme("default");
-
-		setSvc.insertSetting(set);
+//
+//		// 유저 생성했으므로 1:1로 해당 유저의 Setting에 대한 정보도 생성 후 저장
+//		Setting set = new Setting();
+//
+//		set.setUid(user.getUid());
+//		set.setTheme("default");
+//
+//		setSvc.insertSetting(set);
 	}
 
 	// 회원정보 수정
@@ -152,26 +152,32 @@ public class UserController {
 	@GetMapping("/getUserByEmail")
 	public JSONObject getUserEmail(@RequestParam String email) {
 		User user = userSvc.getUserEmail(email);
-
-		HashMap<String, Object> hMap = new HashMap<String, Object>();
-		hMap.put("id", user.getUid());
-		hMap.put("email", user.getEmail());
-		hMap.put("profile", user.getProfile());
-		hMap.put("uname", user.getUname());
-		hMap.put("nickname", user.getNickname());
-		hMap.put("statusMessage", user.getStatusMessage());
-		hMap.put("snsDomain", user.getSnsDomain());
-		hMap.put("status", user.getStatus());
-		hMap.put("regDate", user.getRegDate());
-		hMap.put("gender", user.getGender());
-		hMap.put("provider", user.getProvider());
-		hMap.put("birth", user.getBirth());
-		hMap.put("tel", user.getTel());
-		hMap.put("hashUid", user.getHashUid());
-
-		JSONObject userOut = new JSONObject(hMap);
-
-		return userOut;
+        if (user == null) {
+        	JSONObject qwe = new JSONObject();
+        	System.out.println(qwe);
+        	return qwe;
+        } else {
+        	HashMap<String, Object> hMap = new HashMap<String, Object>();
+        	hMap.put("id", user.getUid());
+        	hMap.put("email", user.getEmail());
+        	hMap.put("profile", user.getProfile());
+        	hMap.put("uname", user.getUname());
+        	hMap.put("nickname", user.getNickname());
+        	hMap.put("statusMessage", user.getStatusMessage());
+        	hMap.put("snsDomain", user.getSnsDomain());
+        	hMap.put("status", user.getStatus());
+        	hMap.put("regDate", user.getRegDate());
+        	hMap.put("gender", user.getGender());
+        	hMap.put("provider", user.getProvider());
+        	hMap.put("birth", user.getBirth());
+        	hMap.put("tel", user.getTel());
+        	hMap.put("hashUid", user.getHashUid());
+        	hMap.put("provider", user.getProvider());
+        	
+        	JSONObject userOut = new JSONObject(hMap);
+        	
+        	return userOut;
+        }
 	}
 
 	@GetMapping("/nickname")
